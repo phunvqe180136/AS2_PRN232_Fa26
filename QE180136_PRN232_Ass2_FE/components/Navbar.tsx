@@ -26,10 +26,10 @@ const navItems = [
 ];
 
 const manageItems = [
-  { href: '/departments/manage', label: 'Departments', icon: FolderTree },
-  { href: '/projects/manage', label: 'Projects', icon: Briefcase },
-  { href: '/tasks/manage', label: 'Tasks', icon: ListTodo },
-  { href: '/tags/manage', label: 'Tags', icon: Tag },
+  { href: '/admin/departments', label: 'Departments', icon: FolderTree },
+  { href: '/admin/projects', label: 'Projects', icon: Briefcase },
+  { href: '/admin/tasks', label: 'Tasks', icon: ListTodo },
+  { href: '/admin/tags', label: 'Tags', icon: Tag },
 ];
 
 export function Navbar() {
