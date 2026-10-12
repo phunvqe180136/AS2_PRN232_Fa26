@@ -22,6 +22,8 @@ import {
   XCircle,
 } from 'lucide-react';
 
+import { RequireAuth } from '@/lib/auth';
+
 export default function ManageTasksPage() {
   const list = useAsync(() => Tasks.list(), []);
   const toast = useToast();
@@ -39,7 +41,8 @@ export default function ManageTasksPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <RequireAuth>
+      <div className="space-y-8">
       <PageHeader
         title="Task Management Hub"
         subtitle="Create, update, tag, and organize company tasks with soft-delete capabilities."
@@ -255,6 +258,7 @@ export default function ManageTasksPage() {
         }}
       />
     </div>
+    </RequireAuth>
   );
 }
 

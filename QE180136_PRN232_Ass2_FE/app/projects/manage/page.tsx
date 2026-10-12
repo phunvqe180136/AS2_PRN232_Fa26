@@ -22,6 +22,8 @@ import {
   Search,
 } from 'lucide-react';
 
+import { RequireAuth } from '@/lib/auth';
+
 export default function ManageProjectsPage() {
   const list = useAsync(() => Projects.list(), []);
   const departments = useAsync(() => Departments.list(), []);
@@ -40,7 +42,8 @@ export default function ManageProjectsPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <RequireAuth>
+      <div className="space-y-8">
       <PageHeader
         title="Project Management"
         subtitle="Configure, track, and maintain all corporate projects and departmental initiatives."
@@ -242,6 +245,7 @@ export default function ManageProjectsPage() {
         }}
       />
     </div>
+    </RequireAuth>
   );
 }
 

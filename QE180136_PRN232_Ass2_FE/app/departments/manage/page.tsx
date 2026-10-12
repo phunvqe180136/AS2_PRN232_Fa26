@@ -19,6 +19,8 @@ import {
   Search,
 } from 'lucide-react';
 
+import { RequireAuth } from '@/lib/auth';
+
 export default function ManageDepartmentsPage() {
   const list = useAsync(() => Departments.list(), []);
   const toast = useToast();
@@ -35,7 +37,8 @@ export default function ManageDepartmentsPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <RequireAuth>
+      <div className="space-y-8">
       <PageHeader
         title="Department Management"
         subtitle="Create, update, and manage organizational units and business departments."
@@ -227,6 +230,7 @@ export default function ManageDepartmentsPage() {
         }}
       />
     </div>
+    </RequireAuth>
   );
 }
 
