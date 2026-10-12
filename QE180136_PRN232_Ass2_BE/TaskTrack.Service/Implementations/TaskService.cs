@@ -25,7 +25,11 @@ public class TaskService : ITaskService
         t.IsActive,
         t.CreatedDate,
         t.ModifiedDate,
-        (t.Tags ?? new List<Tag>()).Select(tag => new TagBriefDto(tag.TagId, tag.TagName, tag.Color)).ToList());
+        (t.Tags ?? new List<Tag>()).Select(tag => new TagBriefDto(tag.TagId, tag.TagName, tag.Color)).ToList(),
+        t.CreatedById,
+        t.CreatedBy?.FullName,
+        t.UpdatedById,
+        t.UpdatedBy?.FullName);
 
     public async Task<List<ProjectTaskDto>> GetAllAsync()
     {
@@ -45,7 +49,7 @@ public class TaskService : ITaskService
         return data.Select(Map).ToList();
     }
 
-    public async Task<ProjectTaskDto> CreateAsync(ProjectTaskCreateDto dto)
+    public async Task<ProjectTaskDto> CreateAsync(ProjectTaskCreateDto dto, int? currentUserId = null)
     {
         var entity = new ProjectTask
         {
@@ -56,7 +60,9 @@ public class TaskService : ITaskService
             DueDate = dto.DueDate,
             ProjectId = dto.ProjectId,
             IsActive = true,
-            CreatedDate = DateTime.UtcNow
+            CreatedDate = DateTime.UtcNow,
+            CreatedById = currentUserId,
+            UpdatedById = currentUserId
         };
 
         var created = await _taskRepo.AddWithTagsAsync(entity, dto.TagIds);
@@ -64,7 +70,7 @@ public class TaskService : ITaskService
         return Map(reload!);
     }
 
-    public async Task<ProjectTaskDto?> UpdateAsync(int id, ProjectTaskUpdateDto dto)
+    public async Task<ProjectTaskDto?> UpdateAsync(int id, ProjectTaskUpdateDto dto, int? currentUserId = null)
     {
         var fields = new ProjectTask
         {
@@ -74,7 +80,8 @@ public class TaskService : ITaskService
             Priority = dto.Priority,
             DueDate = dto.DueDate,
             ProjectId = dto.ProjectId,
-            IsActive = dto.IsActive
+            IsActive = dto.IsActive,
+            UpdatedById = currentUserId
         };
 
         var updated = await _taskRepo.UpdateWithTagsAsync(id, fields, dto.TagIds);
@@ -84,9 +91,9 @@ public class TaskService : ITaskService
         return Map(reload!);
     }
 
-    public async Task<(bool ok, string? error)> DeleteAsync(int id)
+    public async Task<(bool ok, string? error)> DeleteAsync(int id, int? currentUserId = null)
     {
-        var success = await _taskRepo.SoftDeleteAsync(id);
+        var success = await _taskRepo.SoftDeleteAsync(id, currentUserId);
         return success ? (true, null) : (false, "Task not found.");
     }
 
@@ -96,4 +103,3 @@ public class TaskService : ITaskService
         return data.Select(Map).ToList();
     }
 }
-

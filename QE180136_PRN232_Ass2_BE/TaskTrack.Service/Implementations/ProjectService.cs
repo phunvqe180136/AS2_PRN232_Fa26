@@ -22,7 +22,11 @@ public class ProjectService : IProjectService
         p.DepartmentId,
         p.Department?.DepartmentName,
         p.IsActive,
-        p.CreatedDate);
+        p.CreatedDate,
+        p.CreatedById,
+        p.CreatedBy?.FullName,
+        p.UpdatedById,
+        p.UpdatedBy?.FullName);
 
     private static ProjectTaskDto MapTask(ProjectTask t) => new(
         t.TaskId,
@@ -38,7 +42,11 @@ public class ProjectService : IProjectService
         t.IsActive,
         t.CreatedDate,
         t.ModifiedDate,
-        (t.Tags ?? new List<Tag>()).Select(tag => new TagBriefDto(tag.TagId, tag.TagName, tag.Color)).ToList());
+        (t.Tags ?? new List<Tag>()).Select(tag => new TagBriefDto(tag.TagId, tag.TagName, tag.Color)).ToList(),
+        t.CreatedById,
+        t.CreatedBy?.FullName,
+        t.UpdatedById,
+        t.UpdatedBy?.FullName);
 
     public async Task<List<ProjectDto>> GetAllAsync()
     {
@@ -67,7 +75,11 @@ public class ProjectService : IProjectService
             p.Department?.DepartmentName,
             p.IsActive,
             p.CreatedDate,
-            tasks);
+            tasks,
+            p.CreatedById,
+            p.CreatedBy?.FullName,
+            p.UpdatedById,
+            p.UpdatedBy?.FullName);
     }
 
     public async Task<List<ProjectDto>> GetByDepartmentAsync(int departmentId)
@@ -76,7 +88,7 @@ public class ProjectService : IProjectService
         return data.Select(Map).ToList();
     }
 
-    public async Task<ProjectDto> CreateAsync(ProjectCreateDto dto)
+    public async Task<ProjectDto> CreateAsync(ProjectCreateDto dto, int? currentUserId = null)
     {
         var entity = new Project
         {
@@ -87,14 +99,16 @@ public class ProjectService : IProjectService
             Status = dto.Status,
             DepartmentId = dto.DepartmentId,
             IsActive = true,
-            CreatedDate = DateTime.UtcNow
+            CreatedDate = DateTime.UtcNow,
+            CreatedById = currentUserId,
+            UpdatedById = currentUserId
         };
         var created = await _repo.AddAsync(entity);
         var reload = await _repo.GetByIdAsync(created.ProjectId);
         return Map(reload!);
     }
 
-    public async Task<ProjectDto?> UpdateAsync(int id, ProjectUpdateDto dto)
+    public async Task<ProjectDto?> UpdateAsync(int id, ProjectUpdateDto dto, int? currentUserId = null)
     {
         var existing = await _repo.GetByIdAsync(id);
         if (existing is null) return null;
@@ -105,6 +119,10 @@ public class ProjectService : IProjectService
         existing.Status = dto.Status;
         existing.DepartmentId = dto.DepartmentId;
         existing.IsActive = dto.IsActive;
+        if (currentUserId.HasValue)
+        {
+            existing.UpdatedById = currentUserId;
+        }
         await _repo.UpdateAsync(existing);
         var reload = await _repo.GetByIdAsync(id);
         return Map(reload!);
@@ -126,4 +144,3 @@ public class ProjectService : IProjectService
         return data.Select(Map).ToList();
     }
 }
-

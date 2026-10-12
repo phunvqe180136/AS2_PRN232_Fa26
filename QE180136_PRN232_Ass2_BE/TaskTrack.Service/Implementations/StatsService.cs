@@ -18,6 +18,7 @@ public class StatsService : IStatsService
         var projects = await _db.Projects.CountAsync(p => p.IsActive);
         var tasks = await _db.Tasks.Where(t => t.IsActive).ToListAsync();
         var tags = await _db.Tags.CountAsync();
+        var accounts = await _db.Accounts.CountAsync();
 
         return new StatsSummaryDto(
             TotalDepartments: departments,
@@ -28,6 +29,7 @@ public class StatsService : IStatsService
             TasksDone: tasks.Count(t => t.Status == 2),
             TasksCancelled: tasks.Count(t => t.Status == 3),
             OverdueTasks: tasks.Count(t => t.DueDate.HasValue && t.DueDate < today && t.Status != 2 && t.Status != 3),
-            TotalTags: tags);
+            TotalTags: tags,
+            TotalAccounts: accounts);
     }
 }
