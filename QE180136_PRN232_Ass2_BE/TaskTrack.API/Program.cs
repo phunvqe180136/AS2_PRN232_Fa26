@@ -9,6 +9,8 @@ using TaskTrack.Repo.Repositories;
 using TaskTrack.Service.Helpers;
 using TaskTrack.Service.Implementations;
 using TaskTrack.Service.Interfaces;
+// Enable legacy timestamp behavior in Npgsql to support DateTime with any Kind
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
