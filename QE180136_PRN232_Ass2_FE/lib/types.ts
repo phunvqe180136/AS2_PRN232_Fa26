@@ -24,6 +24,10 @@ export interface ProjectDto {
   departmentName?: string | null;
   isActive: boolean;
   createdDate: string;
+  createdById?: number | null;
+  createdByName?: string | null;
+  updatedById?: number | null;
+  updatedByName?: string | null;
   // Legacy aliases
   projectID?: number;
   departmentID?: number;
@@ -56,6 +60,10 @@ export interface TaskDto {
   createdDate: string;
   modifiedDate?: string | null;
   tags: TagBriefDto[];
+  createdById?: number | null;
+  createdByName?: string | null;
+  updatedById?: number | null;
+  updatedByName?: string | null;
   // Legacy aliases
   taskID?: number;
   projectID?: number;
@@ -83,7 +91,6 @@ export interface ProjectUpsertDto {
   status: number;
   departmentId: number;
   isActive?: boolean;
-  // Alias for compatibility
   departmentID?: number;
 }
 
@@ -96,7 +103,6 @@ export interface TaskUpsertDto {
   projectId: number;
   isActive?: boolean;
   tagIds?: number[];
-  // Aliases for compatibility
   projectID?: number;
   tagIDs?: number[];
 }
@@ -116,9 +122,76 @@ export interface SummaryDto {
   tasksCancelled: number;
   overdueTasks: number;
   totalTags: number;
-  // Fallbacks
+  totalAccounts?: number;
   departments?: number;
   projects?: number;
   tasks?: number;
 }
 
+// ----------------- Assignment 2 Auth & Accounts Types -----------------
+
+export interface User {
+  accountId: number;
+  fullName: string;
+  email: string;
+  role: number; // 0 = Staff, 1 = Admin
+  roleName: string;
+}
+
+export interface AuthResponseDto {
+  token: string;
+  refreshToken?: string;
+  accountId: number;
+  fullName: string;
+  email: string;
+  role: number;
+  roleName: string;
+  expiresAt: string;
+}
+
+export interface RegisterRequestDto {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginRequestDto {
+  email: string;
+  password: string;
+}
+
+export interface RefreshTokenRequestDto {
+  refreshToken: string;
+  expiredToken?: string;
+}
+
+export interface AccountDto {
+  accountId: number;
+  fullName: string;
+  email: string;
+  role: number;
+  roleName: string;
+  createdDate: string;
+  createdTasksCount: number;
+}
+
+export interface UpdateAccountDto {
+  fullName: string;
+  role: number;
+}
+
+export interface ProfileDto {
+  accountId: number;
+  fullName: string;
+  email: string;
+  role: number;
+  roleName: string;
+  createdDate: string;
+  createdTasksCount: number;
+}
+
+export interface UpdateProfileRequestDto {
+  fullName: string;
+  currentPassword?: string;
+  newPassword?: string;
+}

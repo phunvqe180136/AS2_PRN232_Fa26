@@ -4,8 +4,36 @@ import {
   TaskDto, TaskUpsertDto,
   TagDto, TagUpsertDto,
   SummaryDto,
+  AuthResponseDto, RegisterRequestDto, LoginRequestDto,
+  AccountDto, UpdateAccountDto,
+  ProfileDto, UpdateProfileRequestDto,
 } from './types';
 import { api } from './api';
+
+export const Auth = {
+  register: (dto: RegisterRequestDto) =>
+    api.post<AuthResponseDto>('/auth/register', dto).then(r => r.data),
+
+  login: (dto: LoginRequestDto) =>
+    api.post<AuthResponseDto>('/auth/login', dto).then(r => r.data),
+
+  refresh: (refreshToken: string) =>
+    api.post<AuthResponseDto>('/auth/refresh', { refreshToken }).then(r => r.data),
+
+  profile: () =>
+    api.get<ProfileDto>('/auth/profile').then(r => r.data),
+
+  updateProfile: (dto: UpdateProfileRequestDto) =>
+    api.put<ProfileDto>('/auth/profile', dto).then(r => r.data),
+};
+
+export const Accounts = {
+  list: () => api.get<AccountDto[]>('/accounts').then(r => r.data),
+  get: (id: number) => api.get<AccountDto>(`/accounts/${id}`).then(r => r.data),
+  update: (id: number, dto: UpdateAccountDto) =>
+    api.put<AccountDto>(`/accounts/${id}`, dto).then(r => r.data),
+  remove: (id: number) => api.delete(`/accounts/${id}`),
+};
 
 export const Departments = {
   list: () => api.get<DepartmentDto[]>('/departments').then(r => r.data),
