@@ -12,6 +12,12 @@ public class Project
     public bool IsActive { get; set; } = true;
     public DateTime CreatedDate { get; set; }
 
+    // Audit fields (Optional Feature 3)
+    public int? CreatedById { get; set; }
+    public SystemAccount? CreatedBy { get; set; }
+    public int? UpdatedById { get; set; }
+    public SystemAccount? UpdatedBy { get; set; }
+
     public Department? Department { get; set; }
     public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
 }

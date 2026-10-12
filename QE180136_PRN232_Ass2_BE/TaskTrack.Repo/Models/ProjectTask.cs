@@ -15,6 +15,12 @@ public class ProjectTask
     public DateTime CreatedDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
 
+    // Audit fields (Optional Feature 3)
+    public int? CreatedById { get; set; }
+    public SystemAccount? CreatedBy { get; set; }
+    public int? UpdatedById { get; set; }
+    public SystemAccount? UpdatedBy { get; set; }
+
     public Project? Project { get; set; }
     public ICollection<Tag> Tags { get; set; } = new List<Tag>();
 }
