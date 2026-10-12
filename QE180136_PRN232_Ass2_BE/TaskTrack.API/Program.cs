@@ -1,6 +1,12 @@
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using TaskTrack.Repo;
 using TaskTrack.Repo.Repositories;
+using TaskTrack.Service.Helpers;
 using TaskTrack.Service.Implementations;
 using TaskTrack.Service.Interfaces;
 
@@ -53,24 +59,87 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
-// ---------- Services ----------
+// ---------- Services & Helpers ----------
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
-// ---------- MVC + Swagger ----------
+// ---------- JWT Authentication & Authorization ----------
+var jwtSecret = builder.Configuration["Jwt:SecretKey"]
+    ?? builder.Configuration["JWT_SECRET"]
+    ?? builder.Configuration["Jwt:Secret"]
+    ?? "PRN232_Assignment2_Super_Secret_Key_For_Authentication_At_Least_32_Chars!";
+
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "TaskTrackAPI";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "TaskTrackClient";
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtIssuer,
+        ValidateAudience = true,
+        ValidAudience = jwtAudience,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+        ClockSkew = TimeSpan.Zero,
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.NameIdentifier
+    };
+});
+
+builder.Services.AddAuthorization();
+
+// ---------- MVC + Swagger with JWT Support ----------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "TaskTrack API",
-        Version = "v1",
-        Description = "Task & Team Management Web API - PRN232 Assignment 1"
+        Version = "v2",
+        Description = "Task & Team Management Web API - PRN232 Assignment 2 (Authentication & Protected Management)"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.\r\nEnter 'Bearer' [space] and then your token in the text input below.\r\nExample: \"Bearer eyJhbGciOiJIUzI1Ni...\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
     });
 });
 
@@ -92,7 +161,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskTrack API v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskTrack API v2");
     c.RoutePrefix = "swagger"; // Standard ASP.NET Core path: /swagger
 });
 
@@ -101,8 +170,9 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapGet("/index.html", () => Results.Redirect("/swagger"));
 
 app.UseCors("AllowFrontend");
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
-app.MapGet("/api", () => Results.Ok(new { name = "TaskTrack API", status = "running", version = "v1" }));
+app.MapGet("/api", () => Results.Ok(new { name = "TaskTrack API", status = "running", version = "v2", auth = "JWT enabled" }));
 
 app.Run();
-
