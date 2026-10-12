@@ -3,10 +3,11 @@ import './globals.css';
 import { Sidebar } from '@/components/Sidebar';
 import { Header } from '@/components/Header';
 import { ToastProvider } from '@/components/Toast';
+import { AuthProvider } from '@/lib/auth';
 
 export const metadata: Metadata = {
-  title: 'TaskMinder — Modern Project & Task Management',
-  description: 'Enterprise Task & Project Management platform built for high-performing teams.',
+  title: 'TaskMinder — Enterprise Task & Team Management',
+  description: 'Enterprise Task & Project Management platform with JWT authentication and role-based access control.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -21,20 +22,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen bg-[#F8FAFC] font-sans antialiased text-slate-800">
-        <ToastProvider>
-          <div className="flex min-h-screen">
-            {/* Left Sidebar */}
-            <Sidebar />
+        <AuthProvider>
+          <ToastProvider>
+            <div className="flex min-h-screen">
+              {/* Left Sidebar */}
+              <Sidebar />
 
-            {/* Main Content Pane */}
-            <div className="flex-1 flex flex-col min-w-0">
-              <Header />
-              <main className="flex-1 p-6 sm:p-8 max-w-[1600px] w-full mx-auto animate-fade-in">
-                {children}
-              </main>
+              {/* Main Content Pane */}
+              <div className="flex-1 flex flex-col min-w-0">
+                <Header />
+                <main className="flex-1 p-6 sm:p-8 max-w-[1600px] w-full mx-auto animate-fade-in">
+                  {children}
+                </main>
+              </div>
             </div>
-          </div>
-        </ToastProvider>
+          </ToastProvider>
+        </AuthProvider>
       </body>
     </html>
   );
