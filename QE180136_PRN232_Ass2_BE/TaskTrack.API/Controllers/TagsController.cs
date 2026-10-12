@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskTrack.Service.DTOs;
 using TaskTrack.Service.Interfaces;
@@ -12,10 +13,12 @@ public class TagsController : ControllerBase
     public TagsController(ITagService svc) => _svc = svc;
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<List<TagDto>>> GetAll() =>
         Ok(await _svc.GetAllAsync());
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<ActionResult<TagDto>> GetById(int id)
     {
         var t = await _svc.GetByIdAsync(id);
@@ -23,6 +26,7 @@ public class TagsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<TagDto>> Create(TagCreateDto dto)
     {
         var created = await _svc.CreateAsync(dto);
@@ -30,6 +34,7 @@ public class TagsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<TagDto>> Update(int id, TagUpdateDto dto)
     {
         var updated = await _svc.UpdateAsync(id, dto);
@@ -37,6 +42,7 @@ public class TagsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         var (ok, error) = await _svc.DeleteAsync(id);

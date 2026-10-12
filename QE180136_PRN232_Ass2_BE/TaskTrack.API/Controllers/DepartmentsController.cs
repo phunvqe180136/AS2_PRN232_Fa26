@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskTrack.Service.DTOs;
 using TaskTrack.Service.Interfaces;
@@ -12,10 +13,12 @@ public class DepartmentsController : ControllerBase
     public DepartmentsController(IDepartmentService svc) => _svc = svc;
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<List<DepartmentDto>>> GetAll() =>
         Ok(await _svc.GetAllAsync());
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<ActionResult<DepartmentDetailDto>> GetById(int id)
     {
         var d = await _svc.GetByIdAsync(id);
@@ -23,6 +26,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<DepartmentDto>> Create(DepartmentCreateDto dto)
     {
         var created = await _svc.CreateAsync(dto);
@@ -30,6 +34,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<DepartmentDto>> Update(int id, DepartmentUpdateDto dto)
     {
         var updated = await _svc.UpdateAsync(id, dto);
@@ -37,6 +42,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         var (ok, error) = await _svc.DeleteAsync(id);
@@ -44,10 +50,10 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpGet("search")]
+    [AllowAnonymous]
     public async Task<ActionResult<List<DepartmentDto>>> Search([FromQuery] string name)
     {
         if (string.IsNullOrWhiteSpace(name)) return BadRequest(new { error = "Query 'name' is required." });
         return Ok(await _svc.SearchAsync(name));
     }
 }
-
