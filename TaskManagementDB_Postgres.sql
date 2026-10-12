@@ -117,10 +117,10 @@ CREATE TABLE "TaskTag" (
 INSERT INTO "SystemAccount" ("AccountID", "FullName", "Email", "PasswordHash", "Role", "CreatedDate") VALUES
     (1, 'System Administrator', 'admin@tasktrack.com',       '$2a$11$e3dYg.KehydBbbHNJDmQAuMZuO3J.xNMx0Ze42UNGgeGedNLzsebW', 1, '2024-01-01 08:00:00'),
     (2, 'Standard Staff',       'staff@tasktrack.com',       '$2a$11$xDcjghgI4BdJkcQuxL/gkutF6xXNVMVLJg1xF4TAwKDLDCJELU7Vy', 0, '2024-01-02 08:30:00'),
-    (3, 'Nguyen Vinh Phu',      'phunv.dev@tasktrack.com',   '$2a$11$e3dYg.KehydBbbHNJDmQAuMZuO3J.xNMx0Ze42UNGgeGedNLzsebW', 1, '2024-01-05 09:00:00'),
-    (4, 'Sarah Connor',         'sarah.lead@tasktrack.com',  '$2a$11$xDcjghgI4BdJkcQuxL/gkutF6xXNVMVLJg1xF4TAwKDLDCJELU7Vy', 0, '2024-01-10 10:15:00'),
-    (5, 'David Miller',         'david.pm@tasktrack.com',    '$2a$11$xDcjghgI4BdJkcQuxL/gkutF6xXNVMVLJg1xF4TAwKDLDCJELU7Vy', 0, '2024-01-12 11:20:00'),
-    (6, 'Elena Rostova',        'elena.qa@tasktrack.com',    '$2a$11$xDcjghgI4BdJkcQuxL/gkutF6xXNVMVLJg1xF4TAwKDLDCJELU7Vy', 0, '2024-01-15 14:00:00');
+    (3, 'Project Manager',      'manager@tasktrack.com',     '$2a$11$6h3AT6wUU5UuN74XiNCGUOt7qJI0n.9XM65idW8Zc1FBnwkltWEbK', 0, '2024-01-05 09:00:00'),
+    (4, 'Senior Developer',     'developer@tasktrack.com',   '$2a$11$qQ3Yn2V43h7PJu7GKN4nS.DyHqipqAbOBeEcwmrrQVLTjP/5poThW', 0, '2024-01-10 10:15:00'),
+    (5, 'Lead QA Engineer',     'qa@tasktrack.com',          '$2a$11$lK0AwHJUkizKHGsPoRYhAeIJ4f6MHV.V9JFbzndw5O7Lmri2yrfzm', 0, '2024-01-12 11:20:00'),
+    (6, 'System Architect',     'lead@tasktrack.com',        '$2a$11$VQivneWegsfhawlC6P9W0Olwgq.MjYXwpkah8lueC8gqEO0IoI0JC', 1, '2024-01-15 14:00:00');
 SELECT setval(pg_get_serial_sequence('"SystemAccount"', 'AccountID'), (SELECT MAX("AccountID") FROM "SystemAccount"));
 
 -- ============================================================
