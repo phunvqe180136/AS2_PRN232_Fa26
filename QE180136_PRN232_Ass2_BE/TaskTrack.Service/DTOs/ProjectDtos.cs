@@ -13,7 +13,11 @@ public record ProjectDto(
     int DepartmentId,
     string? DepartmentName,
     bool IsActive,
-    DateTime CreatedDate);
+    DateTime CreatedDate,
+    int? CreatedById = null,
+    string? CreatedByName = null,
+    int? UpdatedById = null,
+    string? UpdatedByName = null);
 
 public record ProjectDetailDto(
     int ProjectId,
@@ -27,7 +31,11 @@ public record ProjectDetailDto(
     string? DepartmentName,
     bool IsActive,
     DateTime CreatedDate,
-    List<ProjectTaskDto> Tasks);
+    List<ProjectTaskDto> Tasks,
+    int? CreatedById = null,
+    string? CreatedByName = null,
+    int? UpdatedById = null,
+    string? UpdatedByName = null);
 
 public record ProjectCreateDto(
     [Required(ErrorMessage = "ProjectName is required")]
@@ -68,4 +76,3 @@ public record ProjectUpdateDto(
     int DepartmentId,
 
     bool IsActive = true);
-

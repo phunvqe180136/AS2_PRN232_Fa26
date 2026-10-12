@@ -16,4 +16,12 @@ public static class Enums
     {
         { 0, "Low" }, { 1, "Medium" }, { 2, "High" }, { 3, "Critical" }
     };
+
+    public static readonly Dictionary<short, string> AccountRoles = new()
+    {
+        { 0, "Staff" }, { 1, "Admin" }
+    };
+
+    public static string GetRoleName(short role) =>
+        AccountRoles.TryGetValue(role, out var name) ? name : "Staff";
 }

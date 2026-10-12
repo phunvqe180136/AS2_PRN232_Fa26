@@ -18,7 +18,11 @@ public record ProjectTaskDto(
     bool IsActive,
     DateTime CreatedDate,
     DateTime? ModifiedDate,
-    List<TagBriefDto> Tags);
+    List<TagBriefDto> Tags,
+    int? CreatedById = null,
+    string? CreatedByName = null,
+    int? UpdatedById = null,
+    string? UpdatedByName = null);
 
 public record ProjectTaskCreateDto(
     [Required(ErrorMessage = "Title is required")]
@@ -63,4 +67,3 @@ public record ProjectTaskUpdateDto(
     bool IsActive = true,
 
     List<int>? TagIds = null);
-

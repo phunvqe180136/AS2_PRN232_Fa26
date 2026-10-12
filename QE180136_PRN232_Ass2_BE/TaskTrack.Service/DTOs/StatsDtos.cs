@@ -9,4 +9,5 @@ public record StatsSummaryDto(
     int TasksDone,
     int TasksCancelled,
     int OverdueTasks,
-    int TotalTags);
+    int TotalTags,
+    int TotalAccounts = 0);
