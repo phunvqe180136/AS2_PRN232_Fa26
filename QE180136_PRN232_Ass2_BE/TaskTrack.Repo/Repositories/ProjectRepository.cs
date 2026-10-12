@@ -19,6 +19,8 @@ public class ProjectRepository : IProjectRepository
     public Task<List<Project>> GetAllAsync() =>
         _db.Projects.AsNoTracking()
             .Include(p => p.Department)
+            .Include(p => p.CreatedBy)
+            .Include(p => p.UpdatedBy)
             .Where(p => p.IsActive)
             .OrderByDescending(p => p.CreatedDate)
             .ToListAsync();
@@ -26,13 +28,19 @@ public class ProjectRepository : IProjectRepository
     public Task<Project?> GetByIdAsync(int id) =>
         _db.Projects.AsNoTracking()
             .Include(p => p.Department)
+            .Include(p => p.CreatedBy)
+            .Include(p => p.UpdatedBy)
             .FirstOrDefaultAsync(p => p.ProjectId == id);
 
     public Task<Project?> GetByIdWithTasksAsync(int id) =>
         _db.Projects.AsNoTracking()
             .Include(p => p.Department)
+            .Include(p => p.CreatedBy)
+            .Include(p => p.UpdatedBy)
             .Include(p => p.Tasks.Where(t => t.IsActive))
                 .ThenInclude(t => t.Tags)
+            .Include(p => p.Tasks.Where(t => t.IsActive))
+                .ThenInclude(t => t.CreatedBy)
             .FirstOrDefaultAsync(p => p.ProjectId == id);
 
     public async Task<Project> AddAsync(Project entity)
@@ -59,6 +67,8 @@ public class ProjectRepository : IProjectRepository
     public Task<List<Project>> GetByDepartmentAsync(int departmentId) =>
         _db.Projects.AsNoTracking()
             .Include(p => p.Department)
+            .Include(p => p.CreatedBy)
+            .Include(p => p.UpdatedBy)
             .Where(p => p.DepartmentId == departmentId && p.IsActive)
             .OrderByDescending(p => p.CreatedDate)
             .ToListAsync();
@@ -70,6 +80,8 @@ public class ProjectRepository : IProjectRepository
     {
         var q = _db.Projects.AsNoTracking()
             .Include(p => p.Department)
+            .Include(p => p.CreatedBy)
+            .Include(p => p.UpdatedBy)
             .Where(p => p.IsActive)
             .AsQueryable();
 
@@ -80,4 +92,3 @@ public class ProjectRepository : IProjectRepository
         return q.OrderByDescending(p => p.CreatedDate).ToListAsync();
     }
 }
-

@@ -10,7 +10,7 @@ public interface ITaskRepository : IRepository<ProjectTask>
     Task<bool> IsTagUsedAsync(int tagId);
     Task<ProjectTask> AddWithTagsAsync(ProjectTask task, List<int>? tagIds);
     Task<ProjectTask?> UpdateWithTagsAsync(int id, ProjectTask updatedFields, List<int>? tagIds);
-    Task<bool> SoftDeleteAsync(int id);
+    Task<bool> SoftDeleteAsync(int id, int? currentUserId = null);
 }
 
 public class TaskRepository : ITaskRepository
@@ -22,6 +22,8 @@ public class TaskRepository : ITaskRepository
         _db.Tasks.AsNoTracking()
             .Include(t => t.Project)
             .Include(t => t.Tags)
+            .Include(t => t.CreatedBy)
+            .Include(t => t.UpdatedBy)
             .Where(t => t.IsActive)
             .OrderByDescending(t => t.CreatedDate)
             .ToListAsync();
@@ -30,6 +32,8 @@ public class TaskRepository : ITaskRepository
         _db.Tasks.AsNoTracking()
             .Include(t => t.Project)
             .Include(t => t.Tags)
+            .Include(t => t.CreatedBy)
+            .Include(t => t.UpdatedBy)
             .FirstOrDefaultAsync(t => t.TaskId == id);
 
     public async Task<ProjectTask> AddAsync(ProjectTask entity)
@@ -73,6 +77,10 @@ public class TaskRepository : ITaskRepository
         existing.ProjectId = updatedFields.ProjectId;
         existing.IsActive = updatedFields.IsActive;
         existing.ModifiedDate = DateTime.UtcNow;
+        if (updatedFields.UpdatedById.HasValue)
+        {
+            existing.UpdatedById = updatedFields.UpdatedById;
+        }
 
         if (tagIds is not null)
         {
@@ -88,15 +96,21 @@ public class TaskRepository : ITaskRepository
         return existing;
     }
 
-    public async Task<bool> SoftDeleteAsync(int id)
+    public async Task<bool> SoftDeleteAsync(int id, int? currentUserId = null)
     {
         var existing = await _db.Tasks.FirstOrDefaultAsync(t => t.TaskId == id);
         if (existing is null) return false;
         existing.IsActive = false;
         existing.ModifiedDate = DateTime.UtcNow;
+        if (currentUserId.HasValue)
+        {
+            existing.UpdatedById = currentUserId;
+        }
         await _db.SaveChangesAsync();
         return true;
     }
+
+    public Task<bool> SoftDeleteAsync(int id) => SoftDeleteAsync(id, null);
 
     public async Task DeleteAsync(ProjectTask entity)
     {
@@ -110,6 +124,8 @@ public class TaskRepository : ITaskRepository
         _db.Tasks.AsNoTracking()
             .Include(t => t.Project)
             .Include(t => t.Tags)
+            .Include(t => t.CreatedBy)
+            .Include(t => t.UpdatedBy)
             .Where(t => t.ProjectId == projectId && t.IsActive)
             .OrderByDescending(t => t.CreatedDate)
             .ToListAsync();
@@ -119,6 +135,8 @@ public class TaskRepository : ITaskRepository
         var q = _db.Tasks.AsNoTracking()
             .Include(t => t.Project)
             .Include(t => t.Tags)
+            .Include(t => t.CreatedBy)
+            .Include(t => t.UpdatedBy)
             .Where(t => t.IsActive)
             .AsQueryable();
 
@@ -134,4 +152,3 @@ public class TaskRepository : ITaskRepository
     public Task<bool> IsTagUsedAsync(int tagId) =>
         _db.Tasks.AnyAsync(t => t.Tags.Any(tag => tag.TagId == tagId));
 }
-
