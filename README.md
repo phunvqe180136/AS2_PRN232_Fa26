@@ -30,7 +30,7 @@ Both test accounts are live and verified against the database. Graders can use t
 
 | Service | Description | URL / Link |
 |---|---|---|
-| 🌐 **Frontend Application** | Next.js 14 App Router on Vercel | [https://taskminder-qe180136.vercel.app](https://taskminder-qe180136.vercel.app) |
+| 🌐 **Frontend Application** | Next.js 14 App Router on Vercel | [https://taskminder-qe180136-ass2.vercel.app](https://taskminder-qe180136-ass2.vercel.app) *(Hoặc: [https://taskminder-qe180136.vercel.app](https://taskminder-qe180136.vercel.app))* |
 | 🔌 **Backend API / Swagger UI** | .NET 8 Web API on Render.com | [https://tasktrack-api-qe180136.onrender.com/swagger](https://tasktrack-api-qe180136.onrender.com/swagger) |
 | 🐙 **GitHub Repository** | Monorepo containing Backend & Frontend | [https://github.com/phunvqe180136/AS2_PRN232_Fa26](https://github.com/phunvqe180136/AS2_PRN232_Fa26) |
 | 🗄️ **Database Migration Script** | PostgreSQL Schema, Indexes & Expanded 5x Seeds | [`TaskManagementDB_Postgres.sql`](./TaskManagementDB_Postgres.sql) |
