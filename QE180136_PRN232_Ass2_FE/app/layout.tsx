@@ -6,7 +6,7 @@ import { ToastProvider } from '@/components/Toast';
 import { AuthProvider } from '@/lib/auth';
 
 export const metadata: Metadata = {
-  title: 'TaskMinder — Enterprise Task & Team Management',
+  title: 'TaskTrack — Enterprise Task & Team Management',
   description: 'Enterprise Task & Project Management platform with JWT authentication and role-based access control.',
 };
 

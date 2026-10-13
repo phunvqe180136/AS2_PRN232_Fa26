@@ -68,7 +68,7 @@ export function Header() {
 
         <div>
           <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
-            {user ? `Hello, ${user.fullName.split(' ')[0]} 👋` : 'Welcome to TaskMinder 👋'}
+            {user ? `Hello, ${user.fullName.split(' ')[0]} 👋` : 'Welcome to TaskTrack 👋'}
           </h1>
           <p className="text-xs sm:text-sm font-medium text-slate-400">
             {user

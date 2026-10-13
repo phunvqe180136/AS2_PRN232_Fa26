@@ -41,13 +41,13 @@ export default function HomePage() {
           <div className="space-y-3 max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold text-indigo-200 backdrop-blur-md border border-white/10">
               <Sparkles className="h-3.5 w-3.5 text-amber-300" />
-              <span>PRN232 Assignment 1 • Task &amp; Team Management App</span>
+              <span>Enterprise Task &amp; Team Management Platform</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
-              Welcome to TaskMinder Platform 👋
+              Welcome to TaskTrack Platform 👋
             </h1>
             <p className="text-sm text-indigo-100/90 leading-relaxed">
-              Full public CRUD management application for Departments, Projects, and Tasks with soft-delete &amp; PostgreSQL EF Core API integration.
+              Comprehensive management platform for Departments, Projects, and Tasks with PostgreSQL EF Core integration.
             </p>
           </div>
 

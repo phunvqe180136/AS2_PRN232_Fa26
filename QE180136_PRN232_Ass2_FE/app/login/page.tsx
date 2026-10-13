@@ -110,7 +110,7 @@ function LoginForm() {
         <div className="mb-6 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider">
             <span>⚡ One-Click Test Accounts</span>
-            <span className="text-indigo-600 font-extrabold">PRN232 Test</span>
+            <span className="text-indigo-600 font-extrabold">Quick Login</span>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <button

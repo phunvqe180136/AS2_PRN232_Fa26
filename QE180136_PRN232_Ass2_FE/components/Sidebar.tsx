@@ -58,7 +58,7 @@ export function Sidebar() {
               Task<span className="text-indigo-600">Track</span>
             </span>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 block -mt-1">
-              Assignment 2 • RBAC
+              Enterprise • RBAC
             </span>
           </div>
         </Link>

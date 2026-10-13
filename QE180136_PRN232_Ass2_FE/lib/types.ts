@@ -128,7 +128,7 @@ export interface SummaryDto {
   tasks?: number;
 }
 
-// ----------------- Assignment 2 Auth & Accounts Types -----------------
+// ----------------- Auth & Accounts Types -----------------
 
 export interface User {
   accountId: number;

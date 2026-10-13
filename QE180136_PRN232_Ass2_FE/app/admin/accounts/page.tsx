@@ -344,7 +344,7 @@ function AccountsContent() {
                     Warning: User has created {deletingAccount.createdTasksCount} tasks!
                   </p>
                   <p className="text-amber-700 mt-0.5">
-                    Per Assignment 2 requirements, deletion will be rejected with HTTP 400 because this user has created active tasks in the system.
+                    Deletion is rejected because this user has created active tasks in the system to protect data integrity.
                   </p>
                 </div>
               </div>

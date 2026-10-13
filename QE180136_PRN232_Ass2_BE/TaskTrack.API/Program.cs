@@ -117,7 +117,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "TaskTrack API",
         Version = "v2",
-        Description = "Task & Team Management Web API - PRN232 Assignment 2 (Authentication & Protected Management)"
+        Description = "Enterprise Task & Team Management Web API (Authentication & Protected Management)"
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

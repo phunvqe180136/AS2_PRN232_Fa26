@@ -87,7 +87,7 @@ function AdminDashboardContent() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-bold text-indigo-300 border border-indigo-400/20">
               <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-              <span>Assignment 2 • Authenticated Management Console</span>
+              <span>Authenticated Management Console</span>
             </div>
             <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
               Hello, {user?.fullName} 👋
@@ -97,7 +97,7 @@ function AdminDashboardContent() {
               <span className={`font-bold ${isAdmin ? 'text-purple-300' : 'text-blue-300'}`}>
                 {user?.roleName}
               </span>{' '}
-              role privileges. All write operations (Create, Edit, Delete) across the platform are now authenticated with JWT.
+              role privileges. All write operations across the platform are secured with JWT authentication.
             </p>
           </div>
 
