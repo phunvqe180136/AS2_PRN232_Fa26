@@ -167,9 +167,10 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger"; // Standard ASP.NET Core path: /swagger
 });
 
-// Redirect root and /index.html to /swagger for seamless access
-app.MapGet("/", () => Results.Redirect("/swagger"));
-app.MapGet("/index.html", () => Results.Redirect("/swagger"));
+// Redirect root, /swagger, and /index.html to /swagger/index.html for seamless access
+app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
+app.MapGet("/swagger", () => Results.Redirect("/swagger/index.html"));
+app.MapGet("/index.html", () => Results.Redirect("/swagger/index.html"));
 
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
